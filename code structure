@@ -1,0 +1,35 @@
+code summary
+import  numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+df = pd.read_csv('online_exam_data.csv')
+df.isnull().sum()
+df.info()
+df['result'].describe()
+df['exam_mode'].value_counts()
+perf = df['result'] == 'pass'
+
+df['efficiency_rate'] = (df['que_att_within_idl_time'] / df['tot_que_attempted']) * 100
+stats = df[['tot_exam_time', 'efficiency_rate']].agg(['mean', 'std', 'median'])
+print(stats)
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(10,6))
+
+# Automatically remove all non-numeric columns
+numeric_df = df.select_dtypes(include='number')
+
+numeric_df.boxplot()
+
+plt.title("Online Exam Section Time Allocation Analysis")
+plt.ylabel("Time Spent (Minutes)")
+plt.xticks(rotation=15)
+plt.tight_layout()
+plt.show()
+
+plt.figure(figsize=(10, 6))
+sns.boxplot(x=df['exam_mode'] == 'center_based', y='tot_exam_time', data=df)
+plt.title('Time Allocation Distribution by Exam Type')
+plt.show()
